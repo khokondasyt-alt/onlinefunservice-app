@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Dashboard</h1>
+  <nav>
+    <button onclick="logout()">Logout</button>
+    <button onclick="navigateTo('index.html')">Home</button>
+  </nav>
+</header>
+
+<main>
+<h2 id="dashboardTitle"></h2>
+
+<div id="userActions" style="display:none;">
+  <button onclick="simulatePayment()">Pay & Connect</button>
+  <button onclick="simulateChat()">Chat</button>
+  <button onclick="simulateGift()">Send Gift</button>
+  <button onclick="simulateCall()">Video/Audio Call</button>
+</div>
+
+<div id="modelPreview" style="display:none;">
+  <h3>Model Preview</h3>
+  <p>Your profile is under admin approval. You will appear on home page after approval.</p>
+</div>
+</main>
+
+<script src="script.js"></script>
+<script>
+displayDashboard();
+</script>
+</body>
+</html>
