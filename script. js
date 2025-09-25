@@ -1,0 +1,78 @@
+// Elements
+const registrationSection = document.getElementById("registrationSection");
+const loginSection = document.getElementById("loginSection");
+const dashboardSection = document.getElementById("dashboardSection");
+const dashboardTitle = document.getElementById("dashboardTitle");
+
+const showRegisterBtn = document.getElementById("showRegister");
+const showLoginBtn = document.getElementById("showLogin");
+const logoutBtn = document.getElementById("logout");
+
+// Navigation buttons
+showRegisterBtn.addEventListener("click", () => {
+  registrationSection.style.display = "block";
+  loginSection.style.display = "none";
+  dashboardSection.style.display = "none";
+});
+showLoginBtn.addEventListener("click", () => {
+  registrationSection.style.display = "none";
+  loginSection.style.display = "block";
+  dashboardSection.style.display = "none";
+});
+logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem("currentUser");
+  registrationSection.style.display = "block";
+  loginSection.style.display = "none";
+  dashboardSection.style.display = "none";
+  logoutBtn.style.display = "none";
+});
+
+// Registration
+document.getElementById("registrationForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const mobile = document.getElementById("mobile").value;
+  const password = document.getElementById("password").value;
+  const gender = document.getElementById("gender").value;
+
+  let users = JSON.parse(localStorage.getItem("users")) || [];
+
+  if(users.some(u => u.mobile === mobile)){
+    alert("Mobile already registered!");
+    return;
+  }
+
+  const newUser = {
+    mobile,
+    password,
+    category: gender === "Female" ? "Admin" : "User"
+  };
+
+  users.push(newUser);
+  localStorage.setItem("users", JSON.stringify(users));
+  alert("Registration successful!");
+  this.reset();
+});
+
+// Login
+document.getElementById("loginForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  const mobile = document.getElementById("loginMobile").value;
+  const password = document.getElementById("loginPassword").value;
+
+  const users = JSON.parse(localStorage.getItem("users")) || [];
+  const user = users.find(u => u.mobile === mobile && u.password === password);
+
+  if(!user){
+    alert("Invalid mobile or password");
+    return;
+  }
+
+  localStorage.setItem("currentUser", JSON.stringify(user));
+
+  registrationSection.style.display = "none";
+  loginSection.style.display = "none";
+  dashboardSection.style.display = "block";
+  logoutBtn.style.display = "inline-block";
+
+  dashboardTitle.textContent = `Welcome ${user.category} ${user.mobile}`;
+});
