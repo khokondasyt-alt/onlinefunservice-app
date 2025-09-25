@@ -1,9 +1,68 @@
-body { font-family: Arial, sans-serif; padding: 20px; background: #f7f7f7; }
-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-nav button { margin-left: 10px; padding: 6px 12px; background:#6200ee; color:white; border:none; cursor:pointer; border-radius:4px; }
-nav button:hover { background:#3700b3; }
-main { background:#fff; padding:20px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
-input, select, button { display:block; margin:10px 0; padding:8px; width:220px; border-radius:4px; border:1px solid #ccc; }
-.grid { display:flex; flex-wrap:wrap; gap:15px; }
-.user-card { width:120px; text-align:center; border:1px solid #ccc; padding:10px; border-radius:6px; background:#e0e0e0; }
-.user-card img { width:100%; border-radius:4px; }
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #2575fc); /* Gradient Background */
+  color: #fff;
+  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Header Text */
+h1 {
+  font-size: 2.5rem;
+  margin-top: 60px;
+  font-weight: 700;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-top: 10px;
+  color: #e0e0e0;
+}
+
+/* Login Section */
+.login-container {
+  margin-top: 50px;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Buttons */
+button {
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  margin: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.25);
+}
+
+button:hover {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #ff5722, #e91e63);
+}
+
+/* Footer */
+footer {
+  background: rgba(0,0,0,0.3);
+  padding: 12px;
+  font-size: 0.9rem;
+  color: #f1f1f1;
+}
