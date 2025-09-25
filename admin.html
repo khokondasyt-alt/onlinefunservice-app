@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+<h1>Admin Dashboard</h1>
+<nav>
+  <button onclick="logout()">Logout</button>
+  <button onclick="navigateTo('index.html')">Home</button>
+</nav>
+</header>
+
+<main>
+<h2>Pending Model Approvals</h2>
+<div id="pendingModels"></div>
+
+<h2>Approved Users / Payment History</h2>
+<div id="approvedUsers"></div>
+</main>
+
+<script src="script.js"></script>
+<script>
+displayAdminDashboard();
+</script>
+</body>
+</html>
