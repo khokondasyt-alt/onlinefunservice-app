@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel</title>
+  <title>Model Showcase</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,19 +12,34 @@
       margin: 0;
       padding: 0;
     }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      background: #111;
+      padding: 10px;
+    }
+    .tabs button {
+      flex: 1;
+      background: #222;
+      border: none;
+      padding: 10px;
+      margin: 2px;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .tabs button.active { background: orange; }
     .container {
       width: 100%;
-      max-width: 400px;
-      margin: 50px auto;
-      background: rgba(255,255,255,0.1);
+      max-width: 900px;
+      margin: 20px auto;
       padding: 20px;
-      border-radius: 10px;
-      text-align: center;
     }
+    h2 { margin-bottom: 15px; }
     input {
       width: 90%;
       padding: 10px;
-      margin: 10px 0;
+      margin: 8px 0;
       border-radius: 6px;
       border: none;
     }
@@ -37,71 +52,127 @@
       border-radius: 6px;
       cursor: pointer;
     }
-    button.reject {
-      background: #444;
+    button.reject { background: #444; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
     }
-    .dashboard {
-      display: none; /* প্রথমে হাইড */
+    .model-box {
+      background: rgba(255,255,255,0.15);
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
     }
+    .dashboard { display: none; }
     .logout {
       float: right;
       background: red;
       padding: 6px 10px;
       border-radius: 6px;
     }
-    .model-box {
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 6px;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Login Page -->
-  <div class="container" id="loginPage">
-    <h2>Admin Login</h2>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
+  <!-- Tabs -->
+  <div class="tabs">
+    <button onclick="showPage('homePage')" class="active">Home</button>
+    <button onclick="showPage('registerPage')">Register</button>
+    <button onclick="showPage('userLoginPage')">User Login</button>
+    <button onclick="showPage('adminLoginPage')">Admin Login</button>
   </div>
 
-  <!-- Dashboard Page -->
+  <!-- Homepage (Public Model Showcase) -->
+  <div class="container" id="homePage">
+    <h2>All Models</h2>
+    <div class="grid">
+      <div class="model-box">
+        <b>AYUSHI</b><br>7407829350<br>
+        <small>Approved</small>
+      </div>
+      <div class="model-box">
+        <b>PUJA KUMARI</b><br>7407829356<br>
+        <small>Pending</small>
+      </div>
+      <div class="model-box">
+        <b>ROHAN</b><br>7407829357<br>
+        <small>Approved</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Registration -->
+  <div class="container" id="registerPage" style="display:none;">
+    <h2>User Registration</h2>
+    <input type="text" placeholder="Full Name">
+    <input type="text" placeholder="Mobile Number">
+    <input type="password" placeholder="Password">
+    <button>Register</button>
+  </div>
+
+  <!-- User Login -->
+  <div class="container" id="userLoginPage" style="display:none;">
+    <h2>User Login</h2>
+    <input type="text" placeholder="Mobile Number">
+    <input type="password" placeholder="Password">
+    <button>Login</button>
+  </div>
+
+  <!-- Admin Login -->
+  <div class="container" id="adminLoginPage" style="display:none;">
+    <h2>Admin Login</h2>
+    <input type="text" id="adminUser" placeholder="Admin Username">
+    <input type="password" id="adminPass" placeholder="Password">
+    <button onclick="adminLogin()">Login</button>
+  </div>
+
+  <!-- Admin Dashboard -->
   <div class="container dashboard" id="dashboardPage">
     <button class="logout" onclick="logout()">Logout</button>
     <h2>Admin Panel</h2>
     <h3>Pending Models for Approval</h3>
-
-    <div class="model-box">
-      <p><b>AYUSHI</b><br>7407829350<br>Model awaiting approval</p>
-      <button>Approve</button>
-      <button class="reject">Reject</button>
-    </div>
-
-    <div class="model-box">
-      <p><b>PUJA KUMARI</b><br>7407829356<br>Model awaiting approval</p>
-      <button>Approve</button>
-      <button class="reject">Reject</button>
+    <div class="grid">
+      <div class="model-box">
+        <b>PUJA KUMARI</b><br>7407829356<br>
+        <button>Approve</button>
+        <button class="reject">Reject</button>
+      </div>
     </div>
   </div>
 
   <script>
-    function login() {
-      let user = document.getElementById("username").value;
-      let pass = document.getElementById("password").value;
+    // Tab Switching
+    function showPage(pageId) {
+      let pages = ["homePage","registerPage","userLoginPage","adminLoginPage"];
+      pages.forEach(p => document.getElementById(p).style.display = "none");
+      document.getElementById(pageId).style.display = "block";
+
+      let btns = document.querySelectorAll(".tabs button");
+      btns.forEach(b => b.classList.remove("active"));
+      event.target.classList.add("active");
+    }
+
+    // Admin Login
+    function adminLogin() {
+      let user = document.getElementById("adminUser").value;
+      let pass = document.getElementById("adminPass").value;
 
       if (user === "admin" && pass === "1234") {
-        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("homePage").style.display = "none";
+        document.getElementById("registerPage").style.display = "none";
+        document.getElementById("userLoginPage").style.display = "none";
+        document.getElementById("adminLoginPage").style.display = "none";
         document.getElementById("dashboardPage").style.display = "block";
       } else {
-        alert("Invalid Login Details!");
+        alert("Invalid Admin Credentials!");
       }
     }
 
+    // Logout
     function logout() {
       document.getElementById("dashboardPage").style.display = "none";
-      document.getElementById("loginPage").style.display = "block";
+      document.getElementById("homePage").style.display = "block";
     }
   </script>
 
