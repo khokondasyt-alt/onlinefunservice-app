@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Online Fun Service</h1>
+  <nav>
+    <button onclick="navigateTo('index.html')">Home</button>
+    <button onclick="navigateTo('login.html')">Login</button>
+  </nav>
+</header>
+
+<main>
+<h2>Register</h2>
+<form id="registrationForm">
+  <input type="text" id="name" placeholder="Full Name" required>
+  <input type="text" id="mobile" placeholder="Mobile Number" required>
+  <input type="password" id="password" placeholder="Password" required>
+  <select id="gender">
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+  </select>
+  <input type="text" id="photo" placeholder="Photo URL (optional)">
+  <button type="submit">Register</button>
+</form>
+</main>
+
+<script src="script.js"></script>
+<script>
+document.getElementById('registrationForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  registerUser();
+});
+</script>
+</body>
+</html>
