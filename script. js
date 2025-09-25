@@ -1,78 +1,124 @@
-// Elements
-const registrationSection = document.getElementById("registrationSection");
-const loginSection = document.getElementById("loginSection");
-const dashboardSection = document.getElementById("dashboardSection");
-const dashboardTitle = document.getElementById("dashboardTitle");
+const ADMIN_MOBILE = '9999999999';
+const ADMIN_PASSWORD = 'admin123';
 
-const showRegisterBtn = document.getElementById("showRegister");
-const showLoginBtn = document.getElementById("showLogin");
-const logoutBtn = document.getElementById("logout");
+function navigateTo(url){ window.location.href = url; }
 
-// Navigation buttons
-showRegisterBtn.addEventListener("click", () => {
-  registrationSection.style.display = "block";
-  loginSection.style.display = "none";
-  dashboardSection.style.display = "none";
-});
-showLoginBtn.addEventListener("click", () => {
-  registrationSection.style.display = "none";
-  loginSection.style.display = "block";
-  dashboardSection.style.display = "none";
-});
-logoutBtn.addEventListener("click", () => {
-  localStorage.removeItem("currentUser");
-  registrationSection.style.display = "block";
-  loginSection.style.display = "none";
-  dashboardSection.style.display = "none";
-  logoutBtn.style.display = "none";
-});
+// --- Registration ---
+function registerUser(){
+  const name = document.getElementById('name').value;
+  const mobile = document.getElementById('mobile').value;
+  const password = document.getElementById('password').value;
+  const gender = document.getElementById('gender').value;
+  const photo = document.getElementById('photo').value || 'https://via.placeholder.com/100';
 
-// Registration
-document.getElementById("registrationForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const mobile = document.getElementById("mobile").value;
-  const password = document.getElementById("password").value;
-  const gender = document.getElementById("gender").value;
-
-  let users = JSON.parse(localStorage.getItem("users")) || [];
+  let users = JSON.parse(localStorage.getItem('users')) || [];
 
   if(users.some(u => u.mobile === mobile)){
-    alert("Mobile already registered!");
+    alert('Mobile already registered!');
     return;
   }
 
-  const newUser = {
-    mobile,
-    password,
-    category: gender === "Female" ? "Admin" : "User"
-  };
+  const category = gender==='Female' ? 'Model' : 'User';
+  const approved = gender==='Female' ? false : true;
 
-  users.push(newUser);
-  localStorage.setItem("users", JSON.stringify(users));
-  alert("Registration successful!");
-  this.reset();
-});
+  users.push({name, mobile, password, gender, category, photo, approved, paid:false});
+  localStorage.setItem('users', JSON.stringify(users));
+  alert('Registration successful!');
+  window.location.href = 'login.html';
+}
 
-// Login
-document.getElementById("loginForm").addEventListener("submit", function(e){
-  e.preventDefault();
-  const mobile = document.getElementById("loginMobile").value;
-  const password = document.getElementById("loginPassword").value;
+// --- Login ---
+function loginUser(){
+  const mobile = document.getElementById('loginMobile').value;
+  const password = document.getElementById('loginPassword').value;
+  const users = JSON.parse(localStorage.getItem('users')) || [];
 
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users.find(u => u.mobile === mobile && u.password === password);
-
-  if(!user){
-    alert("Invalid mobile or password");
+  if(mobile === ADMIN_MOBILE && password === ADMIN_PASSWORD){
+    localStorage.setItem('currentUser', JSON.stringify({mobile, category:'Admin'}));
+    window.location.href = 'admin.html';
     return;
   }
 
-  localStorage.setItem("currentUser", JSON.stringify(user));
+  const user = users.find(u => u.mobile===mobile && u.password===password);
+  if(!user){ alert('Invalid credentials'); return; }
 
-  registrationSection.style.display = "none";
-  loginSection.style.display = "none";
-  dashboardSection.style.display = "block";
-  logoutBtn.style.display = "inline-block";
+  localStorage.setItem('currentUser', JSON.stringify(user));
+  window.location.href = 'dashboard.html';
+}
 
-  dashboardTitle.textContent = `Welcome ${user.category} ${user.mobile}`;
-});
+// --- Dashboard ---
+function displayDashboard(){
+  const user = JSON.parse(localStorage.getItem('currentUser'));
+  if(!user) window.location.href = 'login.html';
+
+  const title = document.getElementById('dashboardTitle');
+  if(user.category==='Model' && !user.approved){
+    document.getElementById('modelPreview').style.display='block';
+    title.textContent = `Hello Model ${user.name}`;
+  } else {
+    document.getElementById('userActions').style.display='block';
+    title.textContent = `Hello ${user.name} (${user.category})`;
+  }
+}
+
+function logout(){
+  localStorage.removeItem('currentUser');
+  window.location.href = 'index.html';
+}
+
+// --- Admin Dashboard ---
+function displayAdminDashboard(){
+  const user = JSON.parse(localStorage.getItem('currentUser'));
+  if(!user || user.category!=='Admin'){ window.location.href='login.html'; return; }
+
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const pendingModels = users.filter(u => u.category==='Model' && !u.approved);
+  const approvedUsers = users.filter(u => u.approved);
+
+  const pendingDiv = document.getElementById('pendingModels');
+  pendingModels.forEach(u=>{
+    const div = document.createElement('div');
+    div.innerHTML = `<img src="${u.photo}" width="60"><span>${u.name}</span> <button onclick="approveModel('${u.mobile}')">Approve</button>`;
+    pendingDiv.appendChild(div);
+  });
+
+  const approvedDiv = document.getElementById('approvedUsers');
+  approvedUsers.forEach(u=>{
+    const div = document.createElement('div');
+    div.innerHTML = `<img src="${u.photo}" width="50"><span>${u.name}</span> | Paid: ${u.paid ? 'Yes':'No'}`;
+    approvedDiv.appendChild(div);
+  });
+}
+
+function approveModel(mobile){
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const user = users.find(u => u.mobile===mobile);
+  if(user){ user.approved=true; localStorage.setItem('users', JSON.stringify(users)); alert('Model Approved'); location.reload();}
+}
+
+// --- Home Page ---
+function displayApprovedModels(){
+  const users = JSON.parse(localStorage.getItem('users')) || [];
+  const grid = document.getElementById('modelGrid');
+  const approvedModels = users.filter(u => u.category==='Model' && u.approved);
+  approvedModels.forEach(u=>{
+    const card = document.createElement('div');
+    card.classList.add('user-card');
+    card.innerHTML = `<img src="${u.photo}" alt="photo"><p>${u.name}</p>`;
+    grid.appendChild(card);
+  });
+}
+
+// --- User Actions Simulation ---
+function simulatePayment(){
+  const user = JSON.parse(localStorage.getItem('currentUser'));
+  if(!user) return;
+  const users = JSON.parse(localStorage.getItem('users'));
+  const u = users.find(x=>x.mobile===user.mobile);
+  u.paid = true;
+  localStorage.setItem('users', JSON.stringify(users));
+  alert('Payment Successful! Now you can connect with models.');
+}
+
+function simulateChat(){ alert('Chat simulation'); }
+function simulateGift(){ alert('
