@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Online Fun Service - Home</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lovable AI</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; background: #f9f9f9; }
+    header { background: #6200ea; color: white; padding: 20px; }
+    a { display: inline-block; margin: 10px; padding: 10px 20px; background: #03a9f4; color: white; text-decoration: none; border-radius: 5px; }
+    a:hover { background: #0288d1; }
+    .admin-card { display: inline-block; margin: 15px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .admin-card img { width: 120px; height: 120px; border-radius: 50%; }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Lovable AI</h1>
+    <p>Connect with Admins</p>
+  </header>
 
-<header>
-  <h1>Online Fun Service</h1>
-  <nav>
-    <button onclick="navigateTo('register.html')">Register</button>
-    <button onclick="navigateTo('login.html')">Login</button>
-  </nav>
-</header>
+  <div>
+    <a href="login.html">User Login</a>
+    <a href="adminlogin.html">Admin Login</a>
+  </div>
 
-<main>
-  <h2>Approved Models</h2>
-  <div id="modelGrid" class="grid"></div>
-</main>
-
-<script src="script.js"></script>
-<script>
-  displayApprovedModels();
-</script>
+  <section>
+    <h2>Our Admins</h2>
+    <div class="admin-card">
+      <img src="https://via.placeholder.com/120" alt="Admin Photo">
+      <h3>Admin 1</h3>
+    </div>
+    <div class="admin-card">
+      <img src="https://via.placeholder.com/120" alt="Admin Photo">
+      <h3>Admin 2</h3>
+    </div>
+  </section>
 </body>
 </html>
